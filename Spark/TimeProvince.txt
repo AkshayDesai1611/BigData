@@ -1,0 +1,300 @@
+>>> Tp_schema = StructType([ \
+... StructField("date",StringType(),True),
+... StructField("time",IntegerType(),True),
+... StructField("province",StringType(),True),
+... StructField("confirmed",IntegerType(),True),
+... StructField("released",IntegerType(),True),
+... StructField("deceased",IntegerType(),True),
+... ])
+>>> df_tp = spark.createDataFrame(data=tp_list,schema=Tp_schema)
+>>> df_tp.show()
++----------+----+--------+---------+--------+--------+                          
+|      date|time|province|confirmed|released|deceased|
++----------+----+--------+---------+--------+--------+
+|2020-01-20|  16|   Seoul|        0|       0|       0|
++----------+----+--------+---------+--------+--------+
+
+>>> tmpr_df = spark.read.option("header",True).option("inferSchema",True).csv("/input_data/TimeProvince.csv")
+>>> tmpr_df.show()
++----------+----+-----------------+---------+--------+--------+
+|      date|time|         province|confirmed|released|deceased|
++----------+----+-----------------+---------+--------+--------+
+|2020-01-20|  16|            Seoul|        0|       0|       0|
+|2020-01-20|  16|            Busan|        0|       0|       0|
+|2020-01-20|  16|            Daegu|        0|       0|       0|
+|2020-01-20|  16|          Incheon|        1|       0|       0|
+|2020-01-20|  16|          Gwangju|        0|       0|       0|
+|2020-01-20|  16|          Daejeon|        0|       0|       0|
+|2020-01-20|  16|            Ulsan|        0|       0|       0|
+|2020-01-20|  16|           Sejong|        0|       0|       0|
+|2020-01-20|  16|      Gyeonggi-do|        0|       0|       0|
+|2020-01-20|  16|       Gangwon-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongbuk-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongnam-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollabuk-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollanam-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangbuk-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangnam-do|        0|       0|       0|
+|2020-01-20|  16|          Jeju-do|        0|       0|       0|
+|2020-01-21|  16|            Seoul|        0|       0|       0|
+|2020-01-21|  16|            Busan|        0|       0|       0|
+|2020-01-21|  16|            Daegu|        0|       0|       0|
++----------+----+-----------------+---------+--------+--------+
+only showing top 20 rows
+
+>>> tmpr_df.describe()
+DataFrame[summary: string, date: string, time: string, province: string, confirmed: string, released: string, deceased: string]
+>>> tmpr_df.printSchema()
+root
+ |-- date: string (nullable = true)
+ |-- time: integer (nullable = true)
+ |-- province: string (nullable = true)
+ |-- confirmed: integer (nullable = true)
+ |-- released: integer (nullable = true)
+ |-- deceased: integer (nullable = true)
+
+>>> tmpr_df.count()
+2771
+>>> tmpr_df.dropDuplicates().show()
++----------+----+-----------------+---------+--------+--------+
+|      date|time|         province|confirmed|released|deceased|
++----------+----+-----------------+---------+--------+--------+
+|2020-02-04|  16|      Gyeonggi-do|        8|       0|       0|
+|2020-02-15|  16|     Jeollanam-do|        0|       0|       0|
+|2020-02-16|  16|            Seoul|       14|       3|       0|
+|2020-02-19|  16|Chungcheongbuk-do|        0|       0|       0|
+|2020-03-25|   0|Chungcheongbuk-do|       38|      13|       0|
+|2020-03-29|   0|            Seoul|      410|      93|       0|
+|2020-04-09|   0|           Sejong|       46|      16|       0|
+|2020-04-23|   0|            Ulsan|       43|      36|       1|
+|2020-04-26|   0| Gyeongsangbuk-do|     1364|    1109|      52|
+|2020-05-08|   0| Gyeongsangnam-do|      117|     105|       0|
+|2020-05-15|   0|     Jeollabuk-do|       20|      14|       0|
+|2020-05-23|   0|            Seoul|      762|     604|       4|
+|2020-06-21|   0|          Daejeon|       82|      44|       1|
+|2020-02-04|  16| Gyeongsangnam-do|        0|       0|       0|
+|2020-02-28|  16|          Gwangju|        9|       2|       0|
+|2020-03-13|   0|      Gyeonggi-do|      185|      31|       2|
+|2020-04-02|   0|           Sejong|       46|      12|       0|
+|2020-04-18|   0|            Daegu|     6830|    5685|     160|
+|2020-04-30|   0|Chungcheongnam-do|      143|     127|       0|
+|2020-05-05|   0|       Gangwon-do|       53|      42|       2|
++----------+----+-----------------+---------+--------+--------+
+only showing top 20 rows
+
+>>> tmpr_df.limit(5).show()
++----------+----+--------+---------+--------+--------+
+|      date|time|province|confirmed|released|deceased|
++----------+----+--------+---------+--------+--------+
+|2020-01-20|  16|   Seoul|        0|       0|       0|
+|2020-01-20|  16|   Busan|        0|       0|       0|
+|2020-01-20|  16|   Daegu|        0|       0|       0|
+|2020-01-20|  16| Incheon|        1|       0|       0|
+|2020-01-20|  16| Gwangju|        0|       0|       0|
++----------+----+--------+---------+--------+--------+
+
+>>> tmpr_df.select("date","province").show()
++----------+-----------------+
+|      date|         province|
++----------+-----------------+
+|2020-01-20|            Seoul|
+|2020-01-20|            Busan|
+|2020-01-20|            Daegu|
+|2020-01-20|          Incheon|
+|2020-01-20|          Gwangju|
+|2020-01-20|          Daejeon|
+|2020-01-20|            Ulsan|
+|2020-01-20|           Sejong|
+|2020-01-20|      Gyeonggi-do|
+|2020-01-20|       Gangwon-do|
+|2020-01-20|Chungcheongbuk-do|
+|2020-01-20|Chungcheongnam-do|
+|2020-01-20|     Jeollabuk-do|
+|2020-01-20|     Jeollanam-do|
+|2020-01-20| Gyeongsangbuk-do|
+|2020-01-20| Gyeongsangnam-do|
+|2020-01-20|          Jeju-do|
+|2020-01-21|            Seoul|
+|2020-01-21|            Busan|
+|2020-01-21|            Daegu|
++----------+-----------------+
+only showing top 20 rows
+
+>>> tmpr_df.na.drop().show()
++----------+----+-----------------+---------+--------+--------+
+|      date|time|         province|confirmed|released|deceased|
++----------+----+-----------------+---------+--------+--------+
+|2020-01-20|  16|            Seoul|        0|       0|       0|
+|2020-01-20|  16|            Busan|        0|       0|       0|
+|2020-01-20|  16|            Daegu|        0|       0|       0|
+|2020-01-20|  16|          Incheon|        1|       0|       0|
+|2020-01-20|  16|          Gwangju|        0|       0|       0|
+|2020-01-20|  16|          Daejeon|        0|       0|       0|
+|2020-01-20|  16|            Ulsan|        0|       0|       0|
+|2020-01-20|  16|           Sejong|        0|       0|       0|
+|2020-01-20|  16|      Gyeonggi-do|        0|       0|       0|
+|2020-01-20|  16|       Gangwon-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongbuk-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongnam-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollabuk-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollanam-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangbuk-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangnam-do|        0|       0|       0|
+|2020-01-20|  16|          Jeju-do|        0|       0|       0|
+|2020-01-21|  16|            Seoul|        0|       0|       0|
+|2020-01-21|  16|            Busan|        0|       0|       0|
+|2020-01-21|  16|            Daegu|        0|       0|       0|
++----------+----+-----------------+---------+--------+--------+
+only showing top 20 rows
+
+>>> tmpr_df.na.fil(value=0).show()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'DataFrameNaFunctions' object has no attribute 'fil'
+>>> tmpr_df.na.fill(value=0).show()
++----------+----+-----------------+---------+--------+--------+
+|      date|time|         province|confirmed|released|deceased|
++----------+----+-----------------+---------+--------+--------+
+|2020-01-20|  16|            Seoul|        0|       0|       0|
+|2020-01-20|  16|            Busan|        0|       0|       0|
+|2020-01-20|  16|            Daegu|        0|       0|       0|
+|2020-01-20|  16|          Incheon|        1|       0|       0|
+|2020-01-20|  16|          Gwangju|        0|       0|       0|
+|2020-01-20|  16|          Daejeon|        0|       0|       0|
+|2020-01-20|  16|            Ulsan|        0|       0|       0|
+|2020-01-20|  16|           Sejong|        0|       0|       0|
+|2020-01-20|  16|      Gyeonggi-do|        0|       0|       0|
+|2020-01-20|  16|       Gangwon-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongbuk-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongnam-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollabuk-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollanam-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangbuk-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangnam-do|        0|       0|       0|
+|2020-01-20|  16|          Jeju-do|        0|       0|       0|
+|2020-01-21|  16|            Seoul|        0|       0|       0|
+|2020-01-21|  16|            Busan|        0|       0|       0|
+|2020-01-21|  16|            Daegu|        0|       0|       0|
++----------+----+-----------------+---------+--------+--------+
+only showing top 20 rows
+
+>>>  from pyspark.sql.functions import col
+  File "<stdin>", line 1
+    from pyspark.sql.functions import col
+IndentationError: unexpected indent
+>>> from pyspark.sql.functions import col
+>>> tmpr_df.filter((col("province") == "Daegu") & (col("confirmed") > 5)).select("date","released","deceased").show()
++----------+--------+--------+
+|      date|released|deceased|
++----------+--------+--------+
+|2020-02-19|       0|       0|
+|2020-02-20|       0|       0|
+|2020-02-21|       0|       0|
+|2020-02-22|       0|       0|
+|2020-02-23|       0|       1|
+|2020-02-24|       0|       2|
+|2020-02-25|       0|       6|
+|2020-02-26|       1|       6|
+|2020-02-27|       2|       6|
+|2020-02-28|       3|       6|
+|2020-02-29|       3|      10|
+|2020-03-01|       6|      11|
+|2020-03-02|       7|      15|
+|2020-03-03|       9|      21|
+|2020-03-04|      11|      25|
+|2020-03-05|      14|      27|
+|2020-03-06|      15|      30|
+|2020-03-07|      18|      31|
+|2020-03-08|      18|      35|
+|2020-03-09|      21|      35|
++----------+--------+--------+
+only showing top 20 rows
+
+
+>>> tmpr_df.sort(col("confirmed")).show()
++----------+----+-----------------+---------+--------+--------+
+|      date|time|         province|confirmed|released|deceased|
++----------+----+-----------------+---------+--------+--------+
+|2020-01-21|  16|          Gwangju|        0|       0|       0|
+|2020-01-22|  16|      Gyeonggi-do|        0|       0|       0|
+|2020-01-21|  16|          Daejeon|        0|       0|       0|
+|2020-01-20|  16|            Busan|        0|       0|       0|
+|2020-01-21|  16|            Ulsan|        0|       0|       0|
+|2020-01-20|  16|          Gwangju|        0|       0|       0|
+|2020-01-21|  16|           Sejong|        0|       0|       0|
+|2020-01-20|  16|          Daejeon|        0|       0|       0|
+|2020-01-21|  16|      Gyeonggi-do|        0|       0|       0|
+|2020-01-20|  16|           Sejong|        0|       0|       0|
+|2020-01-21|  16|       Gangwon-do|        0|       0|       0|
+|2020-01-20|  16|       Gangwon-do|        0|       0|       0|
+|2020-01-21|  16|Chungcheongbuk-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongnam-do|        0|       0|       0|
+|2020-01-21|  16|Chungcheongnam-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollanam-do|        0|       0|       0|
+|2020-01-21|  16|     Jeollabuk-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangnam-do|        0|       0|       0|
+|2020-01-21|  16|     Jeollanam-do|        0|       0|       0|
+|2020-01-21|  16|            Seoul|        0|       0|       0|
++----------+----+-----------------+---------+--------+--------+
+only showing top 20 rows
+
+>>> tmpr_df.sort(col("time").desc()).show()
++----------+----+-----------------+---------+--------+--------+
+|      date|time|         province|confirmed|released|deceased|
++----------+----+-----------------+---------+--------+--------+
+|2020-01-20|  16|            Seoul|        0|       0|       0|
+|2020-01-20|  16|            Busan|        0|       0|       0|
+|2020-01-20|  16|            Daegu|        0|       0|       0|
+|2020-01-20|  16|          Incheon|        1|       0|       0|
+|2020-01-20|  16|          Gwangju|        0|       0|       0|
+|2020-01-20|  16|          Daejeon|        0|       0|       0|
+|2020-01-20|  16|            Ulsan|        0|       0|       0|
+|2020-01-20|  16|           Sejong|        0|       0|       0|
+|2020-01-20|  16|      Gyeonggi-do|        0|       0|       0|
+|2020-01-20|  16|       Gangwon-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongbuk-do|        0|       0|       0|
+|2020-01-20|  16|Chungcheongnam-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollabuk-do|        0|       0|       0|
+|2020-01-20|  16|     Jeollanam-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangbuk-do|        0|       0|       0|
+|2020-01-20|  16| Gyeongsangnam-do|        0|       0|       0|
+|2020-01-20|  16|          Jeju-do|        0|       0|       0|
+|2020-01-21|  16|            Seoul|        0|       0|       0|
+|2020-01-21|  16|            Busan|        0|       0|       0|
+|2020-01-21|  16|            Daegu|        0|       0|       0|
++----------+----+-----------------+---------+--------+--------+
+only showing top 20 rows
+
+>>> 
+
+>>> newtp = spark.sql("select * from timeprovince where confirmed > 18").show()
++----------+----+----------------+---------+--------+--------+
+|      date|time|        province|confirmed|released|deceased|
++----------+----+----------------+---------+--------+--------+
+|2020-02-19|  16|           Seoul|       20|       3|       0|
+|2020-02-20|  16|           Seoul|       22|       5|       0|
+|2020-02-20|  16|           Daegu|       30|       0|       0|
+|2020-02-20|  16|Gyeongsangbuk-do|       25|       1|       1|
+|2020-02-21|  16|           Seoul|       27|       5|       0|
+|2020-02-21|  16|           Daegu|      110|       0|       0|
+|2020-02-21|  16|Gyeongsangbuk-do|       28|       1|       1|
+|2020-02-22|  16|           Seoul|       30|       6|       0|
+|2020-02-22|  16|           Daegu|      193|       0|       0|
+|2020-02-22|  16|     Gyeonggi-do|       20|       7|       0|
+|2020-02-22|  16|Gyeongsangbuk-do|      145|       1|       3|
+|2020-02-23|  16|           Seoul|       31|       6|       0|
+|2020-02-23|  16|           Busan|       19|       0|       0|
+|2020-02-23|  16|           Daegu|      310|       0|       1|
+|2020-02-23|  16|     Gyeonggi-do|       24|       7|       0|
+|2020-02-23|  16|Gyeongsangbuk-do|      170|       1|       3|
+|2020-02-24|  16|           Seoul|       35|       6|       0|
+|2020-02-24|  16|           Busan|       34|       0|       0|
+|2020-02-24|  16|           Daegu|      483|       0|       2|
+|2020-02-24|  16|     Gyeonggi-do|       35|       7|       0|
++----------+----+----------------+---------+--------+--------+
+only showing top 20 rows
+
+>>> 
+
+
+>>> 
