@@ -1,3 +1,0 @@
-pymongo[srv]
-boto3
-requests
