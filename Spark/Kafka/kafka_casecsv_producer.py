@@ -21,14 +21,14 @@ from typing import List
 FILE_PATH = "E:/BigData/Spark/spark-assignment/kafka/Case.csv"
 columns = ['case_id','province','city','group','infection_case','confirmed','latitude','longitude']
 
-API_KEY = 'JAJAK7O7SRBU6SXO'
+API_KEY = '************'
 ENDPOINT_SCHEMA_URL  = 'https://psrc-0kywq.us-east-2.aws.confluent.cloud'
-API_SECRET_KEY = 'FZDTGskiFmfOawGqtbtszpBQI19L12Ik2JqfNy86lxcg7FzVoneeEQrY3bGChk1F'
-BOOTSTRAP_SERVER = 'pkc-ymrq7.us-east-2.aws.confluent.cloud:9092'
+API_SECRET_KEY = '*********************************'
+BOOTSTRAP_SERVER = 'pkc-ymrq7.us-*****.aws.********.cloud:****'
 SECURITY_PROTOCOL = 'SASL_SSL'
 SSL_MACHENISM = 'PLAIN'
-SCHEMA_REGISTRY_API_KEY = 'A4W4IWAFVL7FVACD'
-SCHEMA_REGISTRY_API_SECRET = 'CpuNWx7Uxp1ztjUOJO7YrfKPfdd4QQ1qQWG2aQrngPKFUWL8wys9zsnqt+XrUY1s'
+SCHEMA_REGISTRY_API_KEY = '*************'
+SCHEMA_REGISTRY_API_SECRET = 'CpuNWx7Ux************************L8wys9zsnqt+XrUY1s'
 
 def sasl_conf():
 
