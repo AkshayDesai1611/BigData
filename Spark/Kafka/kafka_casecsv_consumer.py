@@ -9,14 +9,14 @@ from confluent_kafka.schema_registry.json_schema import JSONDeserializer
 import pymongo
 
 
-API_KEY = 'JAJAK7O7SRBU6SXO'
+API_KEY = '************'
 ENDPOINT_SCHEMA_URL  = 'https://psrc-0kywq.us-east-2.aws.confluent.cloud'
-API_SECRET_KEY = 'FZDTGskiFmfOawGqtbtszpBQI19L12Ik2JqfNy86lxcg7FzVoneeEQrY3bGChk1F'
-BOOTSTRAP_SERVER = 'pkc-ymrq7.us-east-2.aws.confluent.cloud:9092'
+API_SECRET_KEY = '*********************************'
+BOOTSTRAP_SERVER = 'pkc-ymrq7.us-*****.aws.********.cloud:****'
 SECURITY_PROTOCOL = 'SASL_SSL'
 SSL_MACHENISM = 'PLAIN'
-SCHEMA_REGISTRY_API_KEY = 'A4W4IWAFVL7FVACD'
-SCHEMA_REGISTRY_API_SECRET = 'CpuNWx7Uxp1ztjUOJO7YrfKPfdd4QQ1qQWG2aQrngPKFUWL8wys9zsnqt+XrUY1s'
+SCHEMA_REGISTRY_API_KEY = '*************'
+SCHEMA_REGISTRY_API_SECRET = 'CpuNWx7Ux************************L8wys9zsnqt+XrUY1s'
 
 
 def sasl_conf():
@@ -122,7 +122,7 @@ def main(topic):
                 continue
       
             case = json_deserializer(msg.value(), SerializationContext(msg.topic(), MessageField.VALUE))
-            dbConn = pymongo.MongoClient("mongodb+srv://akshay_01:Guddu1898@cluster0.a2gsb8a.mongodb.net/?retryWrites=true&w=majority")
+            dbConn = pymongo.MongoClient("mongodb+srv://ak**ay_**:********@cluster0.a2gsb8a.mongodb.net/?retryWrites=true&w=majority")
             dbName = "ReadfromKafka"
             db = dbConn[dbName]
             collection_name = 'cardekho'
